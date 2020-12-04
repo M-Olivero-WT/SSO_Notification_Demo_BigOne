@@ -15,6 +15,11 @@
       </div>
       <button type='submit' class='bt-normal'>Register</button>
     </form>
+    <div class="preview">
+      <h3>Preview User Data</h3>
+      <p id="p-pre">Email: {{ this.email }}</p>
+      <p id="p-pre">Password: {{ this.password }}</p>
+    </div>
   </div>
 </template>
 
@@ -63,7 +68,7 @@ export default class Register extends Vue {
 }
 </script>
 
-<style scoped>
+<style scoped lang='scss'>
 .error {
   color: red;
   font-size: 18px;
@@ -78,6 +83,17 @@ input {
   margin: 20px;
   font-size: 21px;
 }
+.preview {
+  width: 800px;
+  padding: 10px;
+  border: 1px dotted #ccc;
+  margin: 1% 28%;
+  .p-pre {
+    font-weight: bold;
+    color: darkcyan;
+  }
+}
+
 .bt-normal {
   width: 200px;
   height: 50px;

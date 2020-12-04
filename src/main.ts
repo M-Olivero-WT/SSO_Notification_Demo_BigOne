@@ -5,6 +5,7 @@ import router from './router';
 import store from './store';
 import axios from 'axios';
 import { FIRE } from './_helpers/CONST_REFS';
+import vuetify from './plugins/vuetify';
 
 Vue.prototype.$axios = axios;
 Vue.config.productionTip = false;
@@ -21,7 +22,8 @@ FIRE.auth().onAuthStateChanged((user) => {
     app = new Vue({
       router,
       store,
-      render: (h) => h(App),
+      vuetify,
+      render: (h) => h(App)
     }).$mount('#app');
   }
 });

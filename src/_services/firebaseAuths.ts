@@ -55,7 +55,7 @@ export const createUserWithEmailAndPassowrd = async (
   email: string,
   password: string,
 ) => {
-  const response: UserType | String = await FIRE.auth()
+  const response: UserType | string = await FIRE.auth()
     .createUserWithEmailAndPassword(email, password)
     .then((res) => {
       // console.log('Response -> ', JSON.stringify(res));
@@ -133,10 +133,10 @@ const transformData = (res: any): UserType => {
 
 const filterMessage = (str: string) => {
   let newMessage = '';
-  if (str.includes('Error getting verification code from microsoft.com response')){
-    newMessage = `This type of email is not accepted for the system, \n Please try again with a valid enterprise email.`;
+  if (str.includes('Error getting verification code from microsoft.com response')) {
+    newMessage = `This type of email is not accepted for the system, please try again with a valid enterprise email.`;
   } else {
     newMessage = str;
   }
   return newMessage;
-}
+};

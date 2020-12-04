@@ -1,54 +1,54 @@
 import { MESSAGING } from '../_helpers/CONST_REFS';
 
-export const pushNotifcation = async (info:any) => {
+export const pushNotifcation = async (info: any) => {
   try {
     const token = await MESSAGING.requestPermission()
       .then(() => {
         console.log('Tiene permisos');
         return MESSAGING.getToken();
       })
-      .then((token: any) => {
-        if (token) {
-         // console.log('Este es el token del usuario: ', token);
-          return token;
+      .then((tokenResp: any) => {
+        if (tokenResp) {
+          // console.log('Este es el token del usuario: ', token);
+          return tokenResp;
         }
       })
       .catch((error: Error) => {
         console.log('This is the error -> ', error);
       });
 
-    let payload: any = {
+    const payload: any = {
       title: info.title,
       body: info.body,
       icon: info.icon,
     };
 
-    if(token){
-      console.log('Sending notification...🚀')
+    if (token) {
+      console.log('Sending notification...🚀');
       sendNotification(token, payload);
     }
 
-    MESSAGING.onTokenRefresh(function() {
+    MESSAGING.onTokenRefresh(() => {
       MESSAGING.getToken()
-      .then(function(refreshedToken) {
-        console.log('Token refreshed.',refreshedToken);
-      })
-      .catch(function(err) {
-        console.log('Unable to retrieve refreshed token ', err);
-      });
+        .then((refreshedToken) => {
+          console.log('Token refreshed.', refreshedToken);
+        })
+        .catch((err) => {
+          console.log('Unable to retrieve refreshed token ', err);
+        });
     });
 
     MESSAGING.onMessage((payload) => {
-       console.log(`Message received 🔥 `, payload);
+      console.log(`Message received 🔥 `, payload);
 
       const notificationOption = {
         body: payload.notification.body,
         icon: payload.notification.icon,
       };
       if (Notification.permission === 'granted') {
-        let notification = new Notification(
+        const notification = new Notification(
           payload.notification.title,
-          notificationOption
+          notificationOption,
         );
         notification.onclick = (ev) => {
           ev.preventDefault();
@@ -56,17 +56,16 @@ export const pushNotifcation = async (info:any) => {
           notification.close();
         };
       }
-
     });
   } catch (error) {
     console.error(`Error is ${error}`);
   }
 };
 
-const sendNotification = async (to: string, message: any) => {
+const sendNotification = async (RecipientTo: string, message: any) => {
   const key =
     'AAAATpK521w:APA91bE3As4EMnHdxdUYBAKZXstqkXIs2H9x4ZtVrwc5loWUUp_fUK-GodZF4yr8g-EA7wr9l9c5M0eAJ9bLREVW0x-orpBV4Zn_0ncaE80nF94ROnYQ7Sp8NzeTNKAjhb2YOfPCJ4Rb';
-  let notification = {
+  const notify = {
     title: message.title,
     body: message.body,
     icon: message.icon,
@@ -77,18 +76,18 @@ const sendNotification = async (to: string, message: any) => {
   await fetch('https://fcm.googleapis.com/fcm/send', {
     method: 'POST',
     headers: {
-      Authorization: 'key=' + key,
+      'Authorization': 'key=' + key,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      notification: notification,
-      to: to,
+      notification: notify,
+      to: RecipientTo,
     }),
   })
     .then((response) => {
       console.log('Response notification success 😁 ');
     })
-    .catch(function(error) {
-      console.error('Error response -> ' ,error);
+    .catch((error) => {
+      console.error('Error response -> ', error);
     });
 };
